@@ -240,7 +240,7 @@ LRESULT CALLBACK proc(HWND hwnd, unsigned int msg, WPARAM wp, LPARAM lp) {
 					temp_highlight.push_back(&(cur_data_file[i]));
 					choise_sumbol = true;
 				}
-				else if (i >= find_pos && i < find_pos + find_len) {
+				else if (i >= find_pos && i < find_pos + find_len && find_pos > 0) {
 					SetBkColor(backDc, RGB(255, 0, 0));
 					find_sumbol = true;
 				}
@@ -494,10 +494,9 @@ LRESULT CALLBACK proc(HWND hwnd, unsigned int msg, WPARAM wp, LPARAM lp) {
 				else {
 					p = ef::SearchSubString(std::wstring(arr), cur_data_file, 0, s_e_pos,isLower);
 				}
-				if (p >= 0) {
-					find_pos = p;
-					find_len = std::wstring(arr).length();
-				}
+				find_pos = p;
+				find_len = std::wstring(arr).length();
+
 			}
 			DestroyWindow(findDlg);
 			findDlg = NULL;

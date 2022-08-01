@@ -122,6 +122,7 @@ LRESULT CALLBACK mainProc(HWND wnd,unsigned int msg,WPARAM wp,LPARAM lp) {
 			int pos = HIWORD(wp);
 			SetScrollPos(wnd, SB_VERT, pos, true);
 			scroll = pos * (((r.bottom - r.top) / 2) - 60);
+			cf::UpdateSize(wnd);
 		}; break;
 		}
 	}; break;
@@ -147,6 +148,7 @@ LRESULT CALLBACK mainProc(HWND wnd,unsigned int msg,WPARAM wp,LPARAM lp) {
 				}
 				else {
 					MoveWindow(el.wnd_text, tempX, tempY, blockWidth, 20, true);
+					SetWindowTextA(el.wnd_text, el.name.c_str());
 					MoveWindow(el.wnd, tempX, tempY+20, blockWidth, blockHeight-20, true);
 					cf::drawImageOnWindow(el.wnd, img_file);
 					ShowWindow(el.wnd_text, 1);
@@ -181,6 +183,9 @@ LRESULT CALLBACK mainProc(HWND wnd,unsigned int msg,WPARAM wp,LPARAM lp) {
 			MoveWindow(logWnd->buttonReg, (width / 3) + (width / 3) / 2, height / 1.5, (width / 3) / 2, 20, true);
 		}
 		if (lWnd) {
+			SetScrollRange(wnd, SB_VERT, 0, (lWnd->files.size()/4)-1, true);
+			MoveWindow(lWnd->findEdit, 5, 5, width * (1.0 - 1.0 / 5), 20, true);
+			MoveWindow(lWnd->findButton, width * (1.0 - 1.0 / 5), 5, (width / 5) - 5, 20, true);
 			for (auto& el : lWnd->files) {
 				HDC hdc = GetDC(el.wnd);
 				RECT r;
@@ -188,11 +193,8 @@ LRESULT CALLBACK mainProc(HWND wnd,unsigned int msg,WPARAM wp,LPARAM lp) {
 				HBRUSH brush = CreateSolidBrush(RGB(200, 200, 200));
 				FillRect(hdc, new RECT{ 0,0,r.right,r.bottom }, brush);
 				DeleteObject(brush);
-				ReleaseDC(el.wnd,hdc);
+				ReleaseDC(el.wnd, hdc);
 			}
-			SetScrollRange(wnd, SB_VERT, 0, (lWnd->files.size()/4)-1, true);
-			MoveWindow(lWnd->findEdit, 5, 5, width * (1.0 - 1.0 / 5), 20, true);
-			MoveWindow(lWnd->findButton, width * (1.0 - 1.0 / 5), 5, (width / 5) - 5, 20, true);
 		}
 	}; break;
 	case WM_COMMAND: {
